@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <title>Todo List</title>
+    <style>
+        #addForm {
+            width: 350px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand"><strong>TODO List</strong></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            작업 추가
+                        </a>
+                        <div class="dropdown-menu bg-light bg-opacity-75" id="addForm">
+                            <div class="p-2 text-end">
+                                <div class="mb-2">
+                                    <input class="form-control me-2" type="text" placeholder="작업을 입력해 주세요." aria-label="Create TODO" id="addTodoInput">
+                                </div>
+                                <button class="btn btn-primary" id="addTodo" type="submit">추가</button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="d-flex" role="search">
+                    <input class="form-control me-1" type="search" placeholder="작업 검색" aria-label="Search" id="searchTodoInput">
+                    <button class="btn btn-primary" id="searchTodo" type="submit">Search</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div>
+        <div class="p-2 mt-3 text-lg-end text-center dropdown" id="filterDropdown">
+            <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" id="dropdownButton"></button>
+            <ul class="dropdown-menu user-select-none" id="dropdownFilterMenu">
+            </ul>
+        </div>
+        <ul class="list-group list-group-flush" id="todoList">
+        </ul>
+    </div>
+
+    <script type="module" src="./js/script.js"></script>
+    <script type="module" src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+</body>
+
+</html>
