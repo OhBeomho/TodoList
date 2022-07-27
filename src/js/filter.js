@@ -2,11 +2,12 @@ import {
     useStorage
 } from "./storage.js";
 
-const today = new Date().toLocaleDateString();
+const today = new Date().toLocaleDateString("ko-KR");
 
 export const useFilter = () => {
     const getAllTodos = () => useStorage().getTodos();
-    const getTodayTodos = () => useStorage().getTodos().filter(todo => todo.date === today && !todo.completed);
+    const getFailedTodos = () => useStorage().getTodos().filter(todo => new Date(todo.endDate) < new Date(today) && !todo.completed);
+    const getActiveTodos = () => useStorage().getTodos().filter(todo => new Date(todo.endDate) >= new Date(today) && !todo.completed);
     const getIncompletedTodos = () => useStorage().getTodos().filter(todo => !todo.completed);
     const getCompletedTodos = () => useStorage().getTodos().filter(todo => todo.completed);
 
@@ -16,17 +17,21 @@ export const useFilter = () => {
             func: getAllTodos
         },
         {
-            text: "오늘 해야될 작업",
-            func: getTodayTodos
-        },
-        {
-            text: "해야될 모든 작업",
-            func: getIncompletedTodos
+            text: "진행중인 작업",
+            func: getActiveTodos
         },
         {
             text: "완료한 작업",
             func: getCompletedTodos
         },
+        {
+            text: "완료하지 못한 작업",
+            func: getIncompletedTodos
+        },
+        {
+            text: "기간 내에 못한 작업",
+            func: getFailedTodos
+        }
     ];
 
     return filters;

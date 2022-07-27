@@ -17,12 +17,13 @@ const currentFilter = {
     }
 };
 
-function addTodo(todoText) {
+function addTodo(todoText, startDate, endDate) {
     let newTodoList = storage.getTodos();
     newTodoList.push({
         id: newTodoList.length,
         text: todoText,
-        date: new Date().toLocaleDateString(),
+        startDate,
+        endDate,
         completed: false
     });
     storage.setTodos(newTodoList);
@@ -52,7 +53,7 @@ function toggleComplete(todoID) {
     setTodoList();
 }
 
-function setTodoList() {
+function setTodoList(search = "") {
     const filteredList = filters[currentFilter.id].func();
     document.getElementById("todoList").innerHTML = "";
 
@@ -61,9 +62,9 @@ function setTodoList() {
         todoElement.innerHTML = `
             <div class="list-group-item">
                 <div class="input-group dropdown">
-                    <span class="input-group-text todo-date">${todo.date}</span>
+                    <span class="input-group-text todo-date">${todo.startDate}<br>~<br>${todo.endDate}</span>
                     <input type="text" class="form-control todo-text" placeholder="TODO" value="${todo.text}" disabled>
-                    <button class="btn btn-${todo.completed ? "primary" : "secondary"} dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn btn-${todo.completed ? "primary" : (filters[4].func().find(e => e.id === todo.id) ? "danger" : "secondary")} dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false"></button>
                     <ul class="dropdown-menu user-select-none" id="dropdownTodoMenu">
                         <li><span class="dropdown-item todo-remove">삭제</span></li>
@@ -83,7 +84,7 @@ function setTodoList() {
             }
         });
 
-        if (todo.text.toLowerCase().includes(document.getElementById("searchTodoInput").value.toLowerCase())) {
+        if (search === "" || todo.text.toLowerCase().includes(search.toLowerCase())) {
             document.getElementById("todoList").appendChild(todoElement);
         }
     }
@@ -95,39 +96,60 @@ window.onload = () => {
         filterElement.innerHTML = `<span class="dropdown-item">${filter.text}</span>`;
         filterElement.id = filters.indexOf(filter);
         filterElement.addEventListener("click", () => {
-            currentFilter.id = filterElement.id;
+            currentFilter.id = Number(filterElement.id);
             document.getElementById("dropdownButton").innerText = filters[currentFilter.id].text;
+
+            if (filterElement.id === "4") {
+                document.getElementById("dropdownButton").classList.remove("btn-outline-primary", "btn-outline-secondary");
+                document.getElementById("dropdownButton").classList.add("btn-outline-danger");
+            } else if (filterElement.id === "3") {
+                document.getElementById("dropdownButton").classList.remove("btn-outline-primary", "btn-outline-danger");
+                document.getElementById("dropdownButton").classList.add("btn-outline-secondary");
+            } else {
+                document.getElementById("dropdownButton").classList.remove("btn-outline-danger", "btn-outline-secondary");
+                document.getElementById("dropdownButton").classList.add("btn-outline-primary");
+            }
         });
 
         document.getElementById("dropdownFilterMenu").appendChild(filterElement);
 
-        if (filterElement.id == 1) {
+        if (filterElement.id === "1") {
             filterElement.click();
         }
     }
 
-    document.getElementById("addTodo").addEventListener("click", () => {
-        if (document.getElementById("addTodoInput").value) {
-            addTodo(document.getElementById("addTodoInput").value);
-            document.getElementById("addTodoInput").value = "";
-        }
-    });
+    document.getElementById("addTodo").addEventListener("click", () => onAddTodo());
     document.getElementById("addTodoInput").addEventListener("keydown", event => {
-        if (event.key == "Enter" && document.getElementById("addTodoInput").value) {
-            addTodo(document.getElementById("addTodoInput").value);
-            document.getElementById("addTodoInput").value = "";
+        if (event.key === "Enter") {
+            onAddTodo();
         }
     });
+    const onAddTodo = () => {
+        if (document.getElementById("addTodoInput").value
+            && document.getElementById("addTodoSDInput").value
+            && document.getElementById("addTodoEDInput").value) {
+            let startDateInput = new Date(document.getElementById("addTodoSDInput").value);
+            let endDateInput = new Date(document.getElementById("addTodoEDInput").value);
 
-    const search = () => {
-        if (document.getElementById("searchTodoInput").value) {
-            setTodoList();
+            if (startDateInput > endDateInput) {
+                alert("시작 날짜가 종료 날짜보다 클 수 없습니다.");
+                return;
+            }
+
+            addTodo(document.getElementById("addTodoInput").value,
+                startDateInput.toLocaleDateString("ko-KR"),
+                endDateInput.toLocaleDateString("ko-KR"));
+            document.getElementById("addTodoInput").value = "";
+            document.getElementById("addTodoSDInput").value = "";
+            document.getElementById("addTodoEDInput").value = "";
+            document.getElementById("addForm").classList.remove("show");
         }
-    };
-    document.getElementById("searchTodo").addEventListener("click", () => search());
+    }
+
+    document.getElementById("searchTodo").addEventListener("click", () => setTodoList(document.getElementById("searchTodoInput").value));
     document.getElementById("searchTodoInput").addEventListener("keydown", event => {
-        if (event.key == "Enter" && document.getElementById("searchTodoInput").value) {
-            search();
+        if (event.key === "Enter") {
+            setTodoList(document.getElementById("searchTodoInput").value);
         }
     });
 }
