@@ -132,16 +132,18 @@ window.onload = () => {
             let endDateInput = new Date(document.getElementById("addTodoEDInput").value);
 
             if (startDateInput > endDateInput) {
-                alert("시작 날짜가 종료 날짜보다 클 수 없습니다.");
+                document.getElementById("error").innerText = "시작 날짜가 종료 날짜보다 클 수 없습니다.";
                 return;
             }
 
             addTodo(document.getElementById("addTodoInput").value,
                 startDateInput.toLocaleDateString("ko-KR"),
                 endDateInput.toLocaleDateString("ko-KR"));
+
             document.getElementById("addTodoInput").value = "";
             document.getElementById("addTodoSDInput").value = "";
             document.getElementById("addTodoEDInput").value = "";
+            document.getElementById("error").innerText = "";
             document.getElementById("addForm").classList.remove("show");
         }
     }
