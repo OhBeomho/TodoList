@@ -13,9 +13,10 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false
-        }
+        },
+        icon: "src/assets/icon.ico"
     });
-    window.loadFile("./src/index.html");
+    window.loadFile("src/index.html");
 
     Menu.setApplicationMenu(null);
 }
