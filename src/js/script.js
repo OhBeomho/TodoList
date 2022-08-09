@@ -64,7 +64,7 @@ function setTodoList(search = "") {
                 <div class="input-group dropdown">
                     <span class="input-group-text todo-date">${todo.startDate}<br>~<br>${todo.endDate}</span>
                     <input type="text" class="form-control todo-text" placeholder="TODO" value="${todo.text}" disabled>
-                    <button class="btn btn-${todo.completed ? "primary" : (filters[4].func().find(e => e.id === todo.id) ? "danger" : "secondary")} dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                    <button class="btn btn-${todo.completed ? "primary" : (filters[3].func().find(e => e.id === todo.id) ? "danger" : "secondary")} dropdown-toggle" type="button" data-bs-toggle="dropdown"
                         aria-expanded="false"></button>
                     <ul class="dropdown-menu user-select-none" id="dropdownTodoMenu">
                         <li><span class="dropdown-item todo-remove">삭제</span></li>
@@ -99,10 +99,10 @@ window.onload = () => {
             currentFilter.id = Number(filterElement.id);
             document.getElementById("dropdownButton").innerText = filters[currentFilter.id].text;
 
-            if (filterElement.id === "4") {
+            if (filterElement.id === "3") {
                 document.getElementById("dropdownButton").classList.remove("btn-outline-primary", "btn-outline-secondary");
                 document.getElementById("dropdownButton").classList.add("btn-outline-danger");
-            } else if (filterElement.id === "3") {
+            } else if (filterElement.id === "1") {
                 document.getElementById("dropdownButton").classList.remove("btn-outline-primary", "btn-outline-danger");
                 document.getElementById("dropdownButton").classList.add("btn-outline-secondary");
             } else {
